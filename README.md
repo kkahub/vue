@@ -36,18 +36,23 @@ html을 브라우저로 볼 수 있도록 한다.
     ```
 
 * HTML Snippets
+
 빠른 태그 작성을 돕는다.
 
 * JS-CSS-HTML Formatters
+
 코드 자동완성
 
 * Vue 2 Snippets
+
 Vue.js 2.0 문법 지원, 강조 기능 제공
 
 * Vue-beautify
+
 Vue.js 코드 정리
 
 * ESLint
+
 자바스크립트 문법 체크. 터미널에서 설치를 추천. eslint 모드 해제는 ctrl + D
 
     ```bash
@@ -56,6 +61,7 @@ Vue.js 코드 정리
     ```
 
 * vetur
+
 Vue.js 문법 강조, 코드 자동완성, 디버깅, Linting
 
 ### 4. 크롬 브라우저 Vue.js devtools 확장 프로그램 추가
