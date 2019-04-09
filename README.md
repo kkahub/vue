@@ -22,8 +22,7 @@ $ npm install -g npm
 [Visual Studio Code >](https://code.visualstudio.com/)
 
 #### 3.2 확장 플러그인 설치
-* open in browser
-html을 브라우저로 볼 수 있도록 한다.
+* open in browser : html을 브라우저로 볼 수 있도록 한다.
 
     ```
     ctrl + alt + B
