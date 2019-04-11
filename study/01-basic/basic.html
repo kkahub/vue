@@ -5,6 +5,30 @@
   <meta charset="utf-8">
   <title>Welcome to Vue</title>
   <script src="https://unpkg.com/vue"></script>
+  <style>
+    hr {
+      margin: 20px 0;
+    }
+    table{
+      border-collapse: collapse;
+      border:1px solid #ccc;
+    }
+    tr{
+      border-bottom:1px solid #ccc;
+    }
+    th, td {
+      padding:5px 8px;
+      border-right:1px solid #ccc;
+      text-align: center;
+    }
+    .divider{
+      height:2px;
+      background-color:gray;
+    }
+    .divider td{
+      padding:0;
+    }
+  </style>
 </head>
 
 <body>
@@ -113,7 +137,10 @@
   -->
   <div id="account1">
     예금액: <input type="text" v-model="amount" />
-    <img v-if="amount < 0" src="https://cdn.pixabay.com/photo/2019/04/02/09/37/cat-4097325_960_720.jpg" title="마이너스는 허용하지 않습니다." style="width:40px; height:30px; vertical-align: middle" />
+    <img v-if="amount < 0" 
+      src="https://cdn.pixabay.com/photo/2019/04/02/09/37/cat-4097325_960_720.jpg" 
+      title="마이너스는 허용하지 않습니다." 
+      style="width:40px; height:30px; vertical-align: middle" />
   </div>
 
   <script>
@@ -151,7 +178,7 @@
   <div id="vFor">
     <select id="regions">
       <option disabled="disabled" selected>지역을 선택하세요.</option>
-      <option v-for="(val, key) in regions" v-bind:value="key">{{val}}</option>
+      <option v-for="(val, key, index) in regions" v-bind:value="key">{{index+1}} : {{val}}</option>
     </select>
   </div>
 
@@ -163,10 +190,92 @@
       "D": "Africa",
       "E": "Oceania"
     };
-    var list = new Vue({
+    var selection = new Vue({
       el: '#vFor',
       data: {
         regions: regions
+      }
+    });
+  </script>
+
+  <hr>
+
+  <div id="forExmaple">
+    <table id="list">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>이름</th>
+          <th>전화번호</th>
+          <th>주소</th>
+        </tr>
+      </thead>
+      <tbody id="contacts">
+        <template v-for="(contact, index) in contacts">
+          <tr :key="contact.no">
+            <td>{{contact.no}}</td>
+            <td>{{contact.name}}</td>
+            <td>{{contact.tel}}</td>
+            <td>{{contact.address}}</td>
+          </tr>
+          <tr class="divider" v-if="index%3 === 2">
+            <td colspan="4"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    var model5 = {
+      "pageno" : 1,
+      "pagesize" : 10,
+      "totalcount" : 100,
+      "contacts" : [
+        { "no": 100, "name": "나비", "tel": "010-3939-9521", "address": "서울" },
+        { "no": 99, "name": "노을", "tel": "010-7857-7531", "address": "경기" },
+        { "no": 98, "name": "조조", "tel": "010-4582-4519", "address": "강원" },
+        { "no": 97, "name": "모모", "tel": "010-9534-4537", "address": "충남" },
+        { "no": 96, "name": "후추", "tel": "010-5687-2588", "address": "제주" },
+        { "no": 95, "name": "까미", "tel": "010-5558-4791", "address": "서울" },
+        { "no": 94, "name": "순이", "tel": "010-4519-9125", "address": "제주" },
+      ]
+    }
+    var list = new Vue({
+      el : '#forExmaple',
+      data : model5
+    });
+  </script>
+
+  <hr>
+
+  <h2>기타: v-pre, v-once, v-cloak</h2>
+  <ul>
+    <li>v-pre: pre태그 기능과유사</li>
+    <li>v-once: 처음 한번만 렌더링</li>
+    <li>v-cloak: 화면 깜빡임(FOUC) 해결에 유용. 콧수염 표현식이 보일 수도 있는 문제를 해결</li>
+  </ul>
+
+  <hr>
+
+  <div id="computedExam">
+    <input type="text" v-model="num"><br />
+    1부터 입력된 수까지의 합 : <span>{{sum}}</span>
+  </div>
+  
+  <script>
+    // 1부터 입력된 수까지의 합구하기
+    var vmSum = new Vue({
+      el: '#computedExam',
+      data : {
+        num: 0
+      },
+      computed: {
+        sum: function(){
+          var n = Number(this.num);
+          if (Number.isNaN(n) || n<1) return 0;
+          return ((1+n) * n) / 2;
+        }
       }
     });
   </script>
