@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+
+  <style>
+    hr{
+      margin: 20px 0;
+    }
+    p{
+      padding:10px; 
+      background: #f3f3f3;
+    }
+  </style>
+</head>
+<body>
+  <h2>내장 옵션 접근</h2>
+  <div id="test">
+    {{name}}
+  </div>
+
+  <script>
+    var model = {
+      name: '홍길동'
+    }
+    var vm = new Vue({
+      el: '#test',
+      data: model
+    });
+  </script>
+  <p>
+    콘솔로 테스트<br />
+    vm.name = '이몽룡'<br />
+    model.name = '향단이'<br />
+    vm.$data.name = '성춘향'<br />
+    * 내장 옵션들은 모두 $식별자를 앞에 붙여 충돌을 피함
+  </p>
+
+  <hr>
+
+  <h2>계산형 속성 접근</h2>
+  <div id="computedExam">
+    <input type="text" v-model="num"><br />
+    1부터 입력된 수까지의 합 : <span>{{sum}}</span>
+  </div>
+  
+  <script>
+    // 1부터 입력된 수까지의 합구하기
+    var vmSumCom = new Vue({
+      el: '#computedExam',
+      data: {
+        num: 0
+      },
+      computed: {
+        sum: function () {
+          var n = Number(this.num);
+          if (Number.isNaN(n) || n < 1) return 0;
+          return ((1 + n) * n) / 2;
+        }
+      }
+    });
+  </script>
+  <p>sum은 함수가 맞지만 계산형 속성이라 vmSum.$options.computed.sum으로 접근가능</p>
+
+  <hr>
+
+  <h2>계산형 속성의 getter/setter</h2>
+  <div id="getSet">
+    금액 : <span>{{amount}}원</span>
+  </div>
+
+  <script>
+    var getSetVm = new Vue({
+      el: '#getSet',
+      data: {amt: 1234567},
+      computed: {
+        amount: {
+          get: function(){
+            var s = new String(""+this.amt);
+            var result = "";
+            var num = 0;
+            for(var i=s.length-1; i>=0; i--){
+              result = s[i] + result;
+              if (num%3 == 2 && i !== 0) {
+                result = ',' + result;
+              }
+              num++;
+            }
+            return result;
+          },
+          set : function(amt){
+            if (typeof(amt) === "string") {
+              var result = parseInt(amt.replace(/,/g, ""))
+              if(isNaN(result)) {
+                this.amt = 0;
+              } else {
+                this.amt = result;
+              }
+            } else if (typeof(amt) === "number"){
+              this.amt = amt;
+            }
+          }
+        }
+      }
+    });
+  </script>
+  <p>
+    객체 내부의 속성을 가져오고(접근)/설정(값할당 할 때 조작)한다.<br />
+    사용할 시에 이점<br />
+    - 속성을 설정하기 전에 새 데이터가 적절한지 확인<br />
+    - 속성을 가져오거나 설정하는 동안 데이터에 작업을 수행함<br />
+    - 속성이 설정되고 회수될 수 있는 것을 제어함<br />
+    <br />
+    getter 이점<br />
+    - 계산 미루기 (Lazy getter) : 프로퍼티 접근 전까지 값을 계산하지 않음<br />
+    - 캐싱 (Smart/Memorized getter) : 계산 비용이 큰 경우, 값이 당장 필요하지 않지만 나중에 사용 할 경우, 여러번 이용하지만 변경이 없어 매번 계산할 필요 없을 경우 유용
+  </p>
+
+  <hr>
+
+  <h2>메소드 옵션</h2>
+  <div id="methodExam">
+    <input type="text" v-model="num"><br />
+    1부터 입력된 수까지의 합 : <span>{{sum()}}</span>
+  </div>
+
+  <script>
+    // 1부터 입력된 수까지의 합구하기
+    var vmSumMethods = new Vue({
+      el: '#methodExam',
+      data: {
+        num: 0
+      },
+      methods: {
+        sum: function () {
+          var n = Number(this.num);
+          if (Number.isNaN(n) || n < 1) return 0;
+          return ((1 + n) * n) / 2;
+        }
+      }
+    });
+  </script>
+  <p>
+    computed: 값 변경 없을 시 캐싱된 값을 리턴, 값 변경이 많지 않을 때 효율적<br />
+    methods: 값과 상관없이 항상 실행, 값 변경이 자주 있을 때<br />
+    * ES6 화살표함수 내부에서는 this가 Vue 인스턴스를 가리키지 않고 전역을 가리켜서 메소드에선 사용하지 않는다.
+  </p>
+
+  <hr>
+
+  <h2>관찰 속성</h2>
+  <div id="watchExam">
+    x : <input type="text" v-model="x"><br />
+    y : <input type="text" v-model="y"><br />
+    덧셈 결과 : {{sum}}
+  </div>
+
+  <script>
+    var watchOpt = new Vue({
+      el: '#watchExam',
+      data : {x:0, y:0, sum:0},
+      watch:{
+        x: function(v){
+          console.log("## x 변경");
+          var result = Number(v) + Number(this.y);
+          if (isNaN(result)){
+            this.sum = 0;
+          } else {
+            this.sum = result;
+          }
+        },
+        y: function(v){
+          console.log("## y 변경");
+          this.y = v;
+          var result = Number(this.x) + Number(v);
+          if (isNaN(result)) {
+            this.sum = 0;
+          } else {
+            this.sum = result;
+          }
+        }
+      }
+    });
+  </script>
+  <p>
+    긴 처리 시간이 필요한 비동기 처리에 적합(대표적으로 외부 서버와의 통신)<br />
+    속성의 이름, 해당 속성 변경되었을 때 호출되는 함수<br />
+    watch도 값 변경 때 마다 함수 호출 함(예제가 computed를 쓰는 것이 더 적합 함)
+  </p>
+
+  <hr>
+
+  <h2>위의 예제 computed로 변경</h2>
+  <div id="computedChange">
+    x : <input type="text" v-model="x"><br />
+    y : <input type="text" v-model="y"><br />
+    덧셈 결과 : {{sum}}
+  </div>
+
+  <script>
+    var computedVm = new Vue({
+      el: '#computedChange',
+      data : {x:0, y:0},
+      computed: {
+        sum: function(){
+          var result = Number(this.x) + Number(this.y);
+          if (isNaN(result)) {
+            return 0;
+          } else {
+            return result;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
