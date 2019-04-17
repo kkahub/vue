@@ -36,6 +36,15 @@ $ npm install -g npm
 
 * HTML Snippets : 빠른 태그 작성을 돕는다.
 
+* JS-CSS-HTML Formatter : 코드 자동완성
+
+    ```
+    1. F1을 누르고 settings.json 검색
+    2. 라인추가
+    "editor.formatOnSave": true,
+    "files.autoSave": "onFocusChange"
+    ```
+
 * Vue 2 Snippets : Vue.js 2.0 문법 지원, 강조 기능 제공
 
 * Vue-beautify : Vue.js 코드 정리
