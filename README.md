@@ -47,7 +47,7 @@ $ npm install -g npm
 
   ```
   1. ctrl + fn(cmd) + ,
-  2. settings.json에서 편집 클릭
+  2. 옵션수정 or settings.json에서 편집 클릭
   3. 라인추가
   "files.autoSave": "onFocusChange",
   "prettier.printWidth": 300,
