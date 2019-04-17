@@ -215,5 +215,40 @@
       }
     });
   </script>
+
+  <hr>
+
+  <h2>라이프사이클 다이어그램</h2>
+  <a href="https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram" target="_blank">공식문서 - 다이어그램</a><br /><br />
+
+  <div id="Lifecycle">
+    <input type="text" v-model="num"><br />
+    1부터 입력된 수까지의 합 : <span>{{sum}}</span>
+  </div>
+  
+  <script>
+    // 1부터 입력된 수까지의 합구하기
+    var vmSumLife = new Vue({
+      el: '#Lifecycle',
+      data: {
+        num: 0
+      },
+      created: function(){
+        console.log('Created!!');
+        
+      },
+      updated: function(){
+        console.log('updated!!');
+        console.log(this.num);
+      },
+      computed: {
+        sum: function () {
+          var n = Number(this.num);
+          if (Number.isNaN(n) || n < 1) return 0;
+          return ((1 + n) * n) / 2;
+        }
+      }
+    });
+  </script>
 </body>
 </html>

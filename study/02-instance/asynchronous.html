@@ -2,15 +2,16 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to Vue</title>
+	<title>Vue 비동기 처리, v-cloak</title>
 	<style>
 		#list {width:600px; border:1px solid black; border-collapse:collapse;}
 		#list td, #list th {border:1px solid black; text-align:center;}
 		#list > thead > tr {color:yellow, background-color:puple;}
+		[v-cloak] {display: none;}
 	</style>
 </head>
 <body>
-	<div id="example">
+	<div id="example" v-cloak>
 		<p>
 			이름: <input type="text" v-model="name" placeholder="두자 이상 입력하세요">
 		</p>
@@ -23,14 +24,24 @@
 					<th>주소</th>
 				</tr>
 			</thead>
-			<tbody>
-				
+			<tbody id="contacts">
+				<tr v-for="contact in contactlist">
+					<td>{{contact.no}}</td>
+					<td>{{contact.name}}</td>
+					<td>{{contact.tel}}</td>
+					<td>{{contact.address}}</td>
+				</tr>
 			</tbody>
 		</table>
+		<div v-show="isProcessing === true">조회중</div>
 	</div>
 	<p>
+		이름 검색란에 jo 입력해보기<br /><br />
 		underscore의 _.debounce()는 짧은 시간에 너무 많은 API요청이 일어나는 것을 막음<br />
-		es6-promise는 IE에서 Promise 객체를 이용하기 위한 폴리필
+		API를 효율적으로 호출하기 위해 연속적 호출이 일어나지 않으면 API를 요청<br />
+		예제 스크립트에선 빠르게 타이핑하다가 300ms 동안 타이핑이 없으면 API에 대한 요청 수행<br />
+		<a href="https://underscorejs.org/#debounce" target="_black">공식문서 - debounce</a><br /><br />
+		es6-promise는 IE에서 Promise 객체를 이용하기 위한 폴리필		
 	</p>
 	
 	<script src="https://unpkg.com/vue"></script>
@@ -38,7 +49,42 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
 	<script>
-
+		var vm = new Vue({
+			el: '#example',
+			data: {
+				name: "",
+				isProcessing : false,
+				contactlist: []
+			},
+			watch: {
+				name: function(val){
+					if(val.length >= 2){
+						this.fetchContacts();
+					} else {
+						this.contactlist = [];
+					}
+				}
+			},
+			methods : {
+				fetchContacts: _.debounce(function(){
+					this.contactlist = [];
+					this.isProcessing = true;
+					var url = "http://sample.bmaster.kro.kr/contacts_long/search/" + this.name;
+					var vm = this;
+					fetch(url)
+						.then(function(response){
+							return response.json()
+						}).then(function(json){
+							vm.contactlist = json;
+							vm.isProcessing = false;
+						}).catch(function(ex){
+							console.log('parsing failed', ex);
+							vm.contactlist = [];
+							vm.isProcessing = false;
+						});
+				}, 300)
+			}
+		});
 	</script>
 </body>
 </html>
