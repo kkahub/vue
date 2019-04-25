@@ -40,6 +40,10 @@
         border: 2px solid black;
         background-color: coral;
       }
+      #mouseBtn {
+        position: relative;
+        height: 300px;
+      }
     </style>
     <script src="https://unpkg.com/vue"></script>
   </head>
@@ -261,5 +265,40 @@ function a (e) {
         }
       });
     </script>
+
+    <hr />
+
+    <h2>마우스 버튼 수식어</h2>
+    <div id="mouseBtn" v-on:contextmenu.prevent="ctxStop" @mouseup.left="leftMouse" @mouseup.right="rightMouse">
+      <div>
+        Left Click : 왼쪽으로<br />
+        Right Click : 오른쪽으로
+      </div>
+      <img src="https://cdn.pixabay.com/photo/2015/12/06/18/02/architecture-1079806_960_720.jpg" v-bind:style="{position: 'absolute', left: pos.left + 'px', top: pos.top + 'px', width:100 + 'px', height:100 + 'px'}" />
+    </div>
+
+    <script>
+      var mouseBtn = new Vue({
+        el: "#mouseBtn",
+        data: {
+          pos: { left: 100, top: 100 }
+        },
+        methods: {
+          ctxStop: function(e) {},
+          leftMouse: function(e) {
+            if (this.pos.left > 30) {
+              this.pos.left -= 30;
+              console.log("Move Left!!");
+            }
+          },
+          rightMouse: function(e) {
+            this.pos.left += 30;
+            console.log("Move Right!!");
+          }
+        }
+      });
+    </script>
+
+    <p>.left, .right, .middel</p>
   </body>
 </html>

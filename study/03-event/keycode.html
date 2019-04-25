@@ -13,7 +13,7 @@
   </head>
   <body>
     <div id="example" v-cloak>
-      <p>이름: <input type="text" v-model="name" placeholder="두자 이상 입력하세요" /></p>
+      <p>이름: <input type="text" v-model="name" v-on:keyup="search" placeholder="두자 이상 입력 후 엔터" /></p>
       <table id="list">
         <thead>
           <tr>
@@ -35,16 +35,16 @@
       <div v-show="isProcessing === true">조회중</div>
     </div>
     <p>
-      이름 검색란에 jo 입력해보기<br /><br />
-      underscore의 _.debounce()는 짧은 시간에 너무 많은 API요청이 일어나는 것을 막음<br />
-      API를 효율적으로 호출하기 위해 연속적 호출이 일어나지 않으면 API를 요청<br />
-      예제 스크립트에선 빠르게 타이핑하다가 300ms 동안 타이핑이 없으면 API에 대한 요청 수행<br />
-      <a href="https://underscorejs.org/#debounce" target="_black">공식문서 - debounce</a><br /><br />
-      es6-promise는 IE에서 Promise 객체를 이용하기 위한 폴리필
+      이름 검색란에 jo 입력하고 엔터 쳐보기<br /><br />
+      이전 동일한 예제에서 underscore의 _.debounce()로 API요청이 많이 일어나는 것을 막았지만 keyCode를 활용해 엔터로 검색하기 때문에 필요가 없음<br />
+    </p>
+    <p>
+      Vue에서 제공되는 keyCode<br />
+      .enter, .tab, .delete, .esc, .space, .up, .down, .left, .right, .ctrl, .alt, .shift, .meta<br /><br />
+      ctrl + c 복사키 구현 : v-on:keyup.ctrl.67="copy"
     </p>
 
     <script src="https://unpkg.com/vue"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
     <script>
@@ -55,17 +55,18 @@
           isProcessing: false,
           contactlist: []
         },
-        watch: {
-          name: function(val) {
-            if (val.length >= 2) {
-              this.fetchContacts();
-            } else {
-              this.contactlist = [];
-            }
-          }
-        },
         methods: {
-          fetchContacts: _.debounce(function() {
+          search: function(e) {
+            if (e.keyCode === 13) {
+              var val = e.target.value;
+              if (val.length >= 2) {
+                this.fetchContacts();
+              } else {
+                this.contactlist = [];
+              }
+            }
+          },
+          fetchContacts: function() {
             this.contactlist = [];
             this.isProcessing = true;
             var url = "http://sample.bmaster.kro.kr/contacts_long/search/" + this.name;
@@ -83,7 +84,7 @@
                 vm.contactlist = [];
                 vm.isProcessing = false;
               });
-          }, 300)
+          }
         }
       });
     </script>

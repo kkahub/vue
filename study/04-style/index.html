@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <mata charset="utf-8">
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+
+  <style>
+    hr{
+      margin: 20px 0;
+    }
+    p{
+      padding:10px; 
+      background: #f3f3f3;
+    }
+    .set1{background-color:plum; color:'purple';}
+    .set2{width:120px; text-align:center;}
+    .set3{border:1px dashed sandybrown;}
+  </style>
+</head>
+<body>
+  <h2>style 적용 방법1과 이벤트</h2>
+  <div id="styleApply1">
+    <button v-bind:style="style1" @mouseover.stop="overEvent" @mouseout.stop="outEvent">테스트</button>
+  </div>
+  <script>
+    var styleApply1 = new Vue({
+      el: '#styleApply1',
+      data: {
+        style1: {width:'100px', border: '1px solid purple', backgroundColor:'plum', textAlign: 'center'}
+      },
+      methods:{
+        overEvent: function(e){
+          this.style1.backgroundColor = "purple";
+          this.style1.color = "yellow";
+        },
+        outEvent: function(e){
+          this.style1.backgroundColor = "salmon";
+          this.style1.color = "black";
+        }
+      }
+    });
+  </script>
+  <p>카멜표기법 사용. 이벤트에서 스타일 바꿀 땐 자바스크립트의 객체 형태의 데이터에 직접 접근</p>
+
+  <hr>
+
+  <h2>스타일 적용 방법2</h2>
+  <div id="styleApply2">
+    <div :style="{backgroundColor:a.bc, border:a.bd, width:a.w+'px', height:a.h+'px'}"></div>
+  </div>
+  <script>
+    var styleApply2 = new Vue({
+      el: '#styleApply2',
+      data:{
+        a:{bc:'yellow', bd:'1px solid gray', w:100, h:50}
+      }
+    });
+  </script>
+  <p>코드 유지보수가 어려운 타입으로 추천하지 않는 방법</p>
+
+  <hr>
+
+  <h2>여러 객체 스타일 바인딩</h2>
+  <div id="pluralStyle">
+    <button id="btn1" v-bind:style="[myColor, myLayout]">버튼</button>
+  </div>
+  <script>
+    var pluralCss = new Vue({
+      el: '#pluralStyle',
+      data:{
+        myColor:{backgroundColor:'purple', color:'yellow'},
+        myLayout:{width:'150px', height:'80px', textAlign:'center'}
+      }
+    });
+  </script>
+
+  <hr>
+
+  <h2>CSS 클래스 바인딩</h2>
+  <div id="cssBind">
+    <button id="btn1" v-bind:class="{set1:s1, set2:s2, set3:s3}">버튼1</button>
+    <p>
+      <input type="checkbox" v-model="s1" value="true" />set1 디자인<br />
+      <input type="checkbox" v-model="s2" value="true" />set2 디자인<br />
+      <input type="checkbox" v-model="s3" value="true" />set3 디자인<br />
+    </p>
+  </div>
+  <script>
+    var cssBind = new Vue({
+      el:'#cssBind',
+      data: { s1: false, s2: false, s3: false }
+    });
+  </script>
+  <p>개별로 클래스 값을 지정하는 것은 불편하다.</p>
+</body>
+</html>
+
