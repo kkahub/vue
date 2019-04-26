@@ -13,9 +13,17 @@
       padding:10px; 
       background: #f3f3f3;
     }
+
     .set1{background-color:plum; color:'purple';}
     .set2{width:120px; text-align:center;}
     .set3{border:1px dashed sandybrown;}
+
+    .score{border:1px solid black;}
+    .warning{background-color:orange; color:purple;}
+    .warnimage{position:relative; top:7px; width:24px; height:24px;}
+
+    .boxcolor{ background-color:orange; }
+    .center { width:100px; height:50px; border:1px solid gray; line-height: 50px; text-align: center;}
   </style>
 </head>
 <body>
@@ -77,8 +85,8 @@
 
   <hr>
 
-  <h2>CSS 클래스 바인딩</h2>
-  <div id="cssBind">
+  <h2>CSS 클래스 값으로 바인딩</h2>
+  <div id="cssValBind">
     <button id="btn1" v-bind:class="{set1:s1, set2:s2, set3:s3}">버튼1</button>
     <p>
       <input type="checkbox" v-model="s1" value="true" />set1 디자인<br />
@@ -87,12 +95,81 @@
     </p>
   </div>
   <script>
-    var cssBind = new Vue({
-      el:'#cssBind',
+    var cssValBind = new Vue({
+      el:'#cssValBind',
       data: { s1: false, s2: false, s3: false }
     });
   </script>
   <p>개별로 클래스 값을 지정하는 것은 불편하다.</p>
+
+  <hr>
+
+  <h2>css 클래스 객체로 바인딩</h2>
+  <div id="cssObjBind">
+    <button id="btn1" v-bind:class="mystyle">버튼1</button>
+    <p>
+      <input type="checkbox" v-model="mystyle.set1" value="true" />set1 디자인<br />
+      <input type="checkbox" v-model="mystyle.set2" value="true" />set2 디자인<br />
+      <input type="checkbox" v-model="mystyle.set3" value="true" />set3 디자인<br />
+    </p>
+  </div>
+  <script>
+    var cssObjBind = new Vue({
+      el:'#cssObjBind',
+      data: {
+        mystyle: {set1:false, set2:false, set3:false}
+      }
+    });
+  </script>
+  <p>true면 css 클래스 추가, false면 클래스 제거</p>
+
+  <hr>
+
+  <h2>계산형 속성, 메서드로 CSS 적용</h2>
+  <div id="cssComputed">
+    <div>
+      <p>1부터 100까지만 입력가능합니다.</p>
+      <div>
+        점수: <input type="text" class="score" v-model.number="score" v-bind:class="info" />
+        <img src="https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png" class="warnimage" v-show="info.warning" />
+      </div>
+    </div>
+  </div>
+  <script>
+    var cssComputed = new Vue({
+      el:'#cssComputed',
+      data:{
+        score: 0
+      },
+      computed:{
+        info: function(){
+          if(this.score >= 1 && this.score <= 100){
+            return { warning:false };
+          } else {
+            return { warning:true };
+          }
+        }
+      }
+    });
+  </script>
+
+  <hr>
+
+  <h2>컴포넌트에서 스타일</h2>
+  <div id="componentStyle">
+    <center-box v-bind:class="boxstyle"></center-box>
+  </div>
+  <script>
+    Vue.component('center-box',{
+      template : '<div class="center">중앙에 위치</div>'
+    });
+    var componentVm = new Vue({
+      el:'#componentStyle',
+      data: {
+        boxstyle : { boxcolor:true }
+      }
+    });
+  </script>
 </body>
 </html>
 

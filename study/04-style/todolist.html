@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <mata charset="utf-8">
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+
+  <style>
+    *{box-sizing: border-box;}
+    ul{margin:0; padding:0;}
+    ul li{
+      cursor: pointer;
+      position: relative;
+      padding: 8px 8px 8px 40px;
+      background: #eee;
+      font-size: 14px;
+      transition:.2s;
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    ul li:hover{background: #ddd;}
+    ul li.checked{background: #bbb; color:#fff; text-decoration: line-through;}
+    ul li.checked::before{
+      content:'';
+      position: absolute; top:10px; left:16px;
+      width:8px; height:8px;
+      border-width:0 1px 1px 0; border-style:solid; border-color:#fff;
+      transform: rotate(45deg);
+    }
+    .close{
+      position: absolute; top: 0; right:0;
+      padding:8px 16px;
+    }
+    .close:hover{
+      background: #f44336; color:#fff;
+    }
+    .header{
+      padding: 30px;
+      background: purple;
+      color:yellow; text-align:center;
+    }
+    .header:after{
+      content:'';
+      clear:both;
+      display: table;
+    }
+    .input{
+      float:left;
+      width:75%; height:35px; padding:10px;
+      border:none;
+      font-size:16px;
+    }
+    .addbutton{
+      float:left; cursor: pointer;
+      width:25%; height:35px; padding:10px;
+      background: #d9d9d9; 
+      font-size:13px; color:#555; text-align:center;
+      transition:.3s;
+    }
+    .addbutton:hover{background-color:#bbb;}
+    .complated{text-decoration:none;}
+  </style>
+</head>
+<body>
+  <h2>Todolist Style 예제</h2>
+  <div id="todolistapp">
+    <div id="header" class="header">
+      <h2>Todo List App</h2>
+      <input class="input" id="task" type="text" placeholder="입력 후 엔터!">
+      <span class="addbutton">추 가</span>
+    </div>
+    <ul id="todolist">
+      <li>
+        <span>Task 1</span>
+        <span class="close">&#x00D7;</span>
+      </li>
+      <li class="checked">
+        <span>Task 2</span>
+        <span> (완료)</span>
+        <span class="close">&#x00D7;</span>
+      </li>
+      <li>
+        <span>Task 3</span>
+        <span class="close">&#x00D7;</span>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    var vm = new Vue({
+      el:'#todolistapp',
+      data:{
+        todo: "",
+        todolist:[
+          { todo: "영화보기", done: false },
+          { todo: "주말 산책", done: true },
+          { todo: "ES6 학습", done: false },
+          { todo: "잠실 야구장", done: false }
+        ]
+      },
+      methods: {
+        checked : function(done){
+          if(done) return {checked:true};
+          else return {checked:false};
+        },
+        addTodo : function(e){
+          if(this.todo !== ""){
+            this.todolist.push({todo : this.todo, done:false});
+            this.todo = "";
+          }
+        },
+        deleteTodo : function(index){
+          this.todolist.splice(index, 1);
+        },
+        doneToggle : function(index){
+          this.todolist[index].done = !this.todolist[index].done;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
