@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to Vue</title>
+    <style>
+      hr {
+        margin: 20px 0;
+      }
+      p {
+        padding: 10px;
+        background: #f3f3f3;
+      }
+    </style>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <component-a></component-a>
+      <component-a></component-a>
+      <component-a></component-a>
+    </div>
+    <script>
+      Vue.config.devtools = true;
+      Vue.component("component-a", {
+        template: "<div>hello world</div>"
+      });
+      var v1 = new Vue({
+        el: "#app"
+      });
+    </script>
+    <p>케밥표기법(-), 파스칼표기법(MyComponent) 둘 다 가능하지만, DOM에 바로 쓸 때는 케밥표기법만 가능합니다.</p>
+
+    <hr />
+
+    <div id="app2">
+      <component-b></component-b>
+      <component-b></component-b>
+      <component-b></component-b>
+    </div>
+    <template id="templateB">
+      <div>hello world!!</div>
+    </template>
+    <script>
+      Vue.component("component-b", {
+        template: "#templateB"
+      });
+      var v2 = new Vue({
+        el: "#app2"
+      });
+    </script>
+    <p>template 방법</p>
+
+    <hr />
+
+    <div id="app3">
+      <component-c></component-c>
+      <component-c></component-c>
+      <component-c></component-c>
+    </div>
+    <script type="text/x-template" id="templateC">
+      <div>hello world!!</div>
+    </script>
+    <script>
+      Vue.component("component-c", {
+        template: "#templateC"
+      });
+      var v3 = new Vue({
+        el: "#app3"
+      });
+    </script>
+    <p>script template 방법</p>
+  </body>
+</html>
